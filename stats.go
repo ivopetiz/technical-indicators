@@ -40,9 +40,7 @@ func Std(slice []float64) float64 {
 	return  math.Sqrt(Sum(result)/float64(len(result)))
 }
 
-//func Std(slice []float64) float64 {}
-
-
+// AddToAll adds a value to all slice elements.
 func (slice mfloat) AddToAll(val float64) []float64 {
 	var added_slice []float64
 
