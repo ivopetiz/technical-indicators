@@ -1,70 +1,82 @@
-
-// Package indicators provides functions that can be used as 
+// Package indicators provides functions that can be used as
 // indicators for finance products.
 package indicators
 
-
 // Sma calculates simple moving average of a slice for a certain
 // number of time periods.
-func (slice mfloat) Sma(period int) []float64 {
-	
-	var sma_slice []float64
-	
-	for i:=period; i < len(slice); i++ {
-		sma_slice = append(sma_slice, Sum(slice[i-period:i])/float64(period))
-	}
-	
-	return sma_slice
-}
+func (slice mfloat) SMA(period int) []float64 {
 
+	var smaSlice []float64
+
+	for i := period; i < len(slice); i++ {
+		smaSlice = append(smaSlice, Sum(slice[i-period:i])/float64(period))
+	}
+
+	return smaSlice
+}
 
 // Ema calculates exponential moving average of a slice for a certain
-// number of time periods.
-func (slice mfloat) Ema(period int) []float64 {
-	
-	var ema_slice []float64
+// number of tiSmame periods.
+func (slice mfloat) EMA(period int) []float64 {
 
-	k := 2 / (period+1)
+	var emaSlice []float64
 
-	ema_slice = append(ema_slice, Sum(slice[0:period])/float64(period))
+	k := 2 / (period + 1)
 
-	for i:=period; i < len(slice); i++ {
-		ema_slice = append(ema_slice, slice[i] * float64(k) + ema_slice[len(ema_slice)-1] * float64(1-k))
+	emaSlice = append(emaSlice, Sum(slice[0:period])/float64(period))
+
+	for i := period; i < len(slice); i++ {
+		emaSlice = append(emaSlice, slice[i]*float64(k)+emaSlice[len(emaSlice)-1]*float64(1-k))
 	}
-	
-	return ema_slice
-}
 
+	return emaSlice
+}
 
 // BollingerBands returns upper band, lower band and simple moving
 // average of a slice.
-func BollingerBands(slice mfloat, period int, n_std float64) ([]float64, []float64, []float64) {
+func BollingerBands(slice mfloat, period int, nStd float64) ([]float64, []float64, []float64) {
 
-	var upper_band, lower_band, middle_band mfloat
+	var upperBand, lowerBand, middleBand mfloat
 
-	middle_band = slice.Sma(period)
-    std := Std(middle_band)
-    upper_band = middle_band.AddToAll(std * n_std)
-    lower_band = middle_band.AddToAll(-1.0 * std * n_std)
+	middleBand = slice.SMA(period)
+	std := Std(middleBand)
+	upperBand = middleBand.AddToAll(std * nStd)
+	lowerBand = middleBand.AddToAll(-1.0 * std * nStd)
 
-	return middle_band, upper_band, lower_band
+	return middleBand, upperBand, lowerBand
 }
 
+// MACD stands for moving average convergence divergence.
+func MACD(data mfloat, ema ...int) ([]float64, []float64) {
 
-// MACD returns a slice with z EMA of x and y EMAs corresponding
-// to moving average convergence divergence of init prices slice.
-func MACD(slice mfloat, x, y, z int) []float64 {
-	
-	var ret_slice, x_ema mfloat
+	var macd, ema1, ema2, ema3 mfloat
 
-	ret_slice = slice.Ema(y)
-	x_ema = slice.Ema(x)
-	
-	aux := len(x_ema)-len(ret_slice)
+	if len(ema) < 3 {
+		ema = []int{12, 26, 9}
+	}
 
-	for i:=0; i< len(ret_slice); i++ {
-		ret_slice[i] = ret_slice[i] - x_ema[i+aux]
-	} 
+	ema1 = data.EMA(ema[0])
+	ema2 = data.EMA(ema[1])
+	macd = SubArrays(ema1, ema2)
+	ema3 = macd.EMA(ema[2])
 
-	return ret_slice.Ema(z)
+	return macd, ema3
+}
+
+// OBV means On Balance Volume.
+func OBV(priceData, volumeData mfloat) []float64 {
+
+	obv := []float64{volumeData[0]}
+
+	for i, vol := range volumeData[1:] {
+		if priceData[i] > priceData[i-1] {
+			obv = append(obv, obv[i-1]+vol)
+		} else if priceData[i] < priceData[i-1] {
+			obv = append(obv, obv[i-1]-vol)
+		} else {
+			obv = append(obv, obv[i-1])
+		}
+	}
+
+	return obv
 }
