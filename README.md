@@ -7,6 +7,7 @@ Indicators
 - Bollinger Bands
 - MACD
 - OBV
+- Ichimoku Cloud
 
 ## TODO
 

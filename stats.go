@@ -42,19 +42,43 @@ func (slice mfloat) AddToAll(val float64) []float64 {
 	var addedSlice []float64
 
 	for i := 0; i < len(slice); i++ {
-		slice[i] += val
+		addedSlice = append(addedSlice, slice[i] + val)
 	}
 
 	return addedSlice
 }
 
-// SubArrays subtracts two arrays.
-func SubArrays(array1, array2 []float64) []float64 {
+// SubSlices subtracts two slices.
+func SubSlices(slice1, slice2 []float64) []float64 {
 
 	var result []float64
 
-	for i := 0; i < len(array1); i++ {
-		result = append(result, array1[i]-array2[i])
+	for i := 0; i < len(slice1); i++ {
+		result = append(result, slice1[i]-slice2[i])
+	}
+
+	return result	
+}
+
+// AddSlices adds two slices.
+func AddSlices(slice1, slice2 []float64) []float64 {
+
+	var result []float64
+
+	for i := 0; i < len(slice1); i++ {
+		result = append(result, slice1[i]+slice2[i])
+	}
+
+	return result	
+}
+
+// DivSlice divides a slice by a float.
+func DivSlice(slice []float64, n float64) []float64 {
+
+	var result []float64
+
+	for i := 0; i < len(slice); i++ {
+		result = append(result, slice[i]/n)
 	}
 
 	return result
