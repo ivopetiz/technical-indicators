@@ -12,7 +12,7 @@
 
 ### Want to improve documentation?
 
-  Take a look at the [Wiki](https://github.com/s4w3d0ff/python-poloniex/wiki) and docstrings. Improvement is always welcome.
+  Take a look at the [Wiki](https://github.com/ivopetiz/technical-indicators/wiki) and docstrings. Improvement is always welcome.
 
 ### Want to just show support?
 
