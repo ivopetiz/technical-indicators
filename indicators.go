@@ -3,18 +3,20 @@
 // indicators for finance products.
 package indicators
 
+
 // Sma calculates simple moving average of a slice for a certain
 // number of time periods.
 func (slice mfloat) SMA(period int) []float64 {
 
 	var smaSlice []float64
 
-	for i := period; i < len(slice); i++ {
+	for i := period; i <= len(slice); i++ {
 		smaSlice = append(smaSlice, Sum(slice[i-period:i])/float64(period))
 	}
 
 	return smaSlice
 }
+
 
 // Ema calculates exponential moving average of a slice for a certain
 // number of tiSmame periods.
@@ -33,6 +35,7 @@ func (slice mfloat) EMA(period int) []float64 {
 	return emaSlice
 }
 
+
 // BollingerBands returns upper band, lower band and simple moving
 // average of a slice.
 func BollingerBands(slice mfloat, period int, nStd float64) ([]float64, []float64, []float64) {
@@ -46,6 +49,7 @@ func BollingerBands(slice mfloat, period int, nStd float64) ([]float64, []float6
 
 	return middleBand, upperBand, lowerBand
 }
+
 
 // MACD stands for moving average convergence divergence.
 func MACD(data mfloat, ema ...int) ([]float64, []float64) {
@@ -63,6 +67,7 @@ func MACD(data mfloat, ema ...int) ([]float64, []float64) {
 
 	return macd, ema3
 }
+
 
 // OBV means On Balance Volume.
 func OBV(priceData, volumeData mfloat) []float64 {
