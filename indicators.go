@@ -3,7 +3,6 @@
 // indicators for finance products.
 package indicators
 
-
 // Sma calculates simple moving average of a slice for a certain
 // number of time periods.
 func (slice mfloat) SMA(period int) []float64 {
@@ -24,12 +23,13 @@ func (slice mfloat) EMA(period int) []float64 {
 
 	var emaSlice []float64
 
-	k := 2 / (period + 1)
+	ak := period + 1
+	k := float64(2) / float64(ak)
 
-	emaSlice = append(emaSlice, Sum(slice[0:period])/float64(period))
+	emaSlice = append(emaSlice, slice[0])
 
-	for i := period; i < len(slice); i++ {
-		emaSlice = append(emaSlice, slice[i]*float64(k)+emaSlice[len(emaSlice)-1]*float64(1-k))
+	for i := 1; i < len(slice); i++ {
+		emaSlice = append(emaSlice, (slice[i]*float64(k)) + (emaSlice[i-1]*float64(1-k)))
 	}
 
 	return emaSlice
